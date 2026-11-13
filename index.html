@@ -4,15 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Auditor Pro | Dashboard</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="description" content="Estima los tokens y el costo de un prompt y su respuesta según el modelo de IA utilizado.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="glow-bg"></div>
+    <div class="glow-bg" aria-hidden="true"></div>
     
     <main class="main-wrapper">
         <header class="hero-section">
-            <h1>AI TOKEN<span>AUDIT</span></h1>
+            <h1>AI TOKEN <span>AUDIT</span></h1>
             <p>Monitoreo de costos por procesamiento de lenguaje natural</p>
         </header>
 
@@ -32,35 +35,37 @@
 
             <div class="workspace">
                 <div class="editor-box">
-                    <label>PROMPT ENVIADO (ENTRADA)</label>
+                    <label for="prompt-input">PROMPT ENVIADO (ENTRADA)</label>
                     <textarea id="prompt-input" placeholder="Pega el mensaje que enviaste..."></textarea>
-                    <div class="badge">Tokens Est.: <span id="token-in-est">0</span></div>
+                    <div class="badge">Tokens Est.: <output id="token-in-est" for="prompt-input">0</output></div>
                 </div>
 
                 <div class="editor-box">
-                    <label>RESPUESTA RECIBIDA (SALIDA)</label>
+                    <label for="response-input">RESPUESTA RECIBIDA (SALIDA)</label>
                     <textarea id="response-input" placeholder="Pega la respuesta de la IA..."></textarea>
-                    <div class="badge">Tokens Est.: <span id="token-out-est">0</span></div>
+                    <div class="badge">Tokens Est.: <output id="token-out-est" for="response-input">0</output></div>
                 </div>
             </div>
 
-            <div class="financial-summary">
+            <div class="financial-summary" aria-live="polite">
                 <div class="stat-card">
                     <span class="label">COSTO ENTRADA</span>
-                    <h3 id="cost-in-display">$0.0000</h3>
+                    <output id="cost-in-display" class="stat-value">$0.0000</output>
                 </div>
                 <div class="stat-card featured">
                     <span class="label">INVERSIÓN TOTAL</span>
-                    <h2 id="total-cost-display">$0.0000</h2>
+                    <output id="total-cost-display" class="stat-value stat-value--featured">$0.0000</output>
                 </div>
                 <div class="stat-card">
                     <span class="label">COSTO SALIDA</span>
-                    <h3 id="cost-out-display">$0.0000</h3>
+                    <output id="cost-out-display" class="stat-value">$0.0000</output>
                 </div>
             </div>
+
+            <p class="pricing-note" id="pricing-note"></p>
         </section>
     </main>
 
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
 </body>
 </html>
