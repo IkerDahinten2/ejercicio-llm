@@ -1,4 +1,13 @@
-const modelPrices = {
+/**
+ * Auditoría de costos de tokens para modelos de lenguaje.
+ * Estima los tokens a partir de la cantidad de caracteres y calcula el costo
+ * según el precio por millón de tokens de cada modelo.
+ */
+
+// Precios en USD por millón de tokens (entrada / salida).
+// Son valores de referencia: actualízalos junto con PRICES_UPDATED.
+const PRICES_UPDATED = '2025';
+const MODEL_PRICES = {
     gpt45: { input: 75.00, output: 150.00 },
     claude37: { input: 3.00, output: 15.00 },
     geminiPro: { input: 1.25, output: 10.00 },
@@ -6,32 +15,44 @@ const modelPrices = {
     deepseekR1: { input: 0.55, output: 2.19 }
 };
 
-const modelSelect = document.getElementById('model-select');
-const promptIn = document.getElementById('prompt-input');
-const responseIn = document.getElementById('response-input');
+// Promedio aproximado de caracteres por token en texto en español/inglés
+const CHARS_PER_TOKEN = 3.8;
+const TOKENS_PER_MILLION = 1_000_000;
+
+const money = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 4 });
+const integer = new Intl.NumberFormat('es-GT');
+
+const el = {
+    model: document.getElementById('model-select'),
+    prompt: document.getElementById('prompt-input'),
+    response: document.getElementById('response-input'),
+    tokensIn: document.getElementById('token-in-est'),
+    tokensOut: document.getElementById('token-out-est'),
+    costIn: document.getElementById('cost-in-display'),
+    costOut: document.getElementById('cost-out-display'),
+    total: document.getElementById('total-cost-display'),
+    note: document.getElementById('pricing-note')
+};
+
+const estimateTokens = text => Math.ceil(text.length / CHARS_PER_TOKEN);
+const cost = (tokens, pricePerMillion) => (tokens / TOKENS_PER_MILLION) * pricePerMillion;
 
 function updateAudit() {
-    const model = modelSelect.value;
-    const tokensIn = Math.ceil((promptIn.value.length) / 3.8);
-    const tokensOut = Math.ceil((responseIn.value.length) / 3.8);
+    const price = MODEL_PRICES[el.model.value];
+    if (!price) return;
 
-    document.getElementById('token-in-est').innerText = tokensIn.toLocaleString();
-    document.getElementById('token-out-est').innerText = tokensOut.toLocaleString();
+    const tokensIn = estimateTokens(el.prompt.value);
+    const tokensOut = estimateTokens(el.response.value);
+    const costIn = cost(tokensIn, price.input);
+    const costOut = cost(tokensOut, price.output);
 
-    const price = modelPrices[model];
-    const cIn = (tokensIn / 1000000) * price.input;
-    const cOut = (tokensOut / 1000000) * price.output;
-
-    renderMoney('cost-in-display', cIn);
-    renderMoney('cost-out-display', cOut);
-    renderMoney('total-cost-display', cIn + cOut);
+    el.tokensIn.textContent = integer.format(tokensIn);
+    el.tokensOut.textContent = integer.format(tokensOut);
+    el.costIn.textContent = money.format(costIn);
+    el.costOut.textContent = money.format(costOut);
+    el.total.textContent = money.format(costIn + costOut);
 }
 
-function renderMoney(id, val) {
-    document.getElementById(id).innerText = new Intl.NumberFormat('en-US', {
-        style: 'currency', currency: 'USD', minimumFractionDigits: 4
-    }).format(val);
-}
-
-[modelSelect, promptIn, responseIn].forEach(el => el.addEventListener('input', updateAudit));
+el.note.textContent = `Precios de referencia (${PRICES_UPDATED}) por millón de tokens. Los tokens son una estimación: cada proveedor usa su propio tokenizador.`;
+[el.model, el.prompt, el.response].forEach(input => input.addEventListener('input', updateAudit));
 updateAudit();
