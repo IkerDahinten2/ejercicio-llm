@@ -13,6 +13,7 @@ Dashboard web para **estimar el costo de uso de modelos de lenguaje (LLM)** a pa
 - **Selector de modelos**: GPT-4.5, Claude 3.7 Sonnet, Gemini 1.5 Pro, Gemini 1.5 Flash y DeepSeek R1.
 - **Estimación de tokens en tiempo real** mientras se escribe o pega texto (≈ 3.8 caracteres por token).
 - **Desglose de costos**: costo de entrada, costo de salida e inversión total, con precisión de 4 decimales.
+- **Accesible**: etiquetas asociadas a cada campo, resultados anunciados a lectores de pantalla (`aria-live`) y contraste mejorado.
 - **Interfaz moderna** con efecto *glassmorphism* (`backdrop-filter`), fondo con brillo y diseño responsivo.
 
 ## Tecnologías
@@ -53,7 +54,12 @@ costo   = (tokens / 1 000 000) × precio_por_millón
 
 Los precios por millón de tokens (entrada / salida) están definidos en el objeto `modelPrices` de `script.js` y pueden actualizarse fácilmente.
 
-> **Nota:** la cantidad de tokens es una estimación; cada proveedor usa su propio tokenizador.
+> **Nota:** la cantidad de tokens es una estimación; cada proveedor usa su propio tokenizador. Los precios son de referencia (constante `PRICES_UPDATED`) y la página lo indica junto a los resultados.
+
+## Pruebas realizadas
+
+- Rutas de estilos y scripts verificadas.
+- Cálculo probado: 3 800 caracteres de entrada y 7 600 de salida con Claude 3.7 Sonnet dan 1 000 y 2 000 tokens y un total de $0.0330.
 
 ## Flujo de ramas
 
