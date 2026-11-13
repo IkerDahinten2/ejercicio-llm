@@ -166,8 +166,16 @@ textarea:focus {
 
 .stat-card .label {
     font-size: 0.7rem;
-    color: #555;
+    color: #9a9a9a; /* #555 no tenía contraste suficiente sobre el fondo oscuro */
     letter-spacing: 1px;
+}
+
+.stat-value {
+    display: block;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin-top: 10px;
 }
 
 .stat-card h3 {
@@ -175,11 +183,25 @@ textarea:focus {
     margin-top: 10px;
 }
 
+.stat-value--featured,
 .stat-card.featured h2 {
     font-size: 3rem;
     color: var(--primary);
     text-shadow: 0 0 30px rgba(222, 255, 154, 0.3);
     margin-top: 5px;
+}
+
+.pricing-note {
+    margin-top: 25px;
+    font-size: 0.75rem;
+    color: #9a9a9a;
+    text-align: center;
+}
+
+textarea:focus-visible,
+select:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
 }
 
 @media (max-width: 900px) {
